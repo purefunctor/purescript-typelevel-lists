@@ -1,3 +1,4 @@
+-- | Type-level heterogenous list of kinds for PureScript
 module Type.Data.List
   ( kind List'
   , kind Item'
@@ -50,7 +51,7 @@ foreign import data SymbolItem :: Symbol -> Item'
 foreign import data BooleanItem :: Boolean -> Item'
 
 
--- | A typeclass for membership tests.
+-- | Performs membership testing given an `Item'` and a `List'`.
 class IsMember ( x :: Item' ) ( xs :: List' ) ( r :: Boolean ) | x xs -> r
 
 
@@ -68,7 +69,7 @@ else
 instance isMemberRec :: IsMember x ys r => IsMember x (y :> ys) r
 
 
--- | A typeclass for `List'` concatenation
+-- | Concatenates two `List'`s together.
 class Concat ( xs :: List' ) ( ys :: List' ) ( zs :: List' ) | xs ys -> zs
 
 
