@@ -38,11 +38,11 @@ foreign import data Cons' :: Item' -> List' -> List'
 infixr 1 type Cons' as :>
 
 
--- | Wraps a `Type`, converting it into an `Item'`.
+-- | Wraps a `Type` into an `Item'`.
 foreign import data TypeItem :: Type -> Item'
 
 
--- | Wraps a `Symbol` , converting it into an `Item'`.
+-- | Wraps a `Symbol` into an `Item'`.
 foreign import data SymbolItem :: Symbol -> Item'
 
 
