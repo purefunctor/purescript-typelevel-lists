@@ -46,6 +46,10 @@ foreign import data TypeItem :: Type -> Item'
 foreign import data SymbolItem :: Symbol -> Item'
 
 
+-- | Wraps a `Boolean` into an `Item'`.
+foreign import data BooleanItem :: Boolean -> Item'
+
+
 -- | A typeclass for membership tests.
 class IsMember ( x :: Item' ) ( xs :: List' ) ( r :: Boolean ) | x xs -> r
 
