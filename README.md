@@ -6,6 +6,7 @@ Type-level heterogenous list of kinds for PureScript.
 ``` purescript
 import Prelude
 
+import Prim.Boolean
 import Type.Data.List
 
 
@@ -36,10 +37,13 @@ zs = concat xs ys
 
 
 -- Null-checking
-empty :: forall xs. Empty xs => ListProxy xs -> ListProxy xs
-empty = identity
+mustBeEmpty :: forall xs. IsEmpty xs True => ListProxy xs -> ListProxy xs
+mustBeEmpty = identity
 
-checkEmpty = empty (ListProxy :: ListProxy Nil')
+empty = mustBeEmpty ( ListProxy :: ListProxy Nil' )
 
--- checkNonEmpty = empty (ListProxy :: ListProxy (TypeItem String :> Nil'))
+mustHaveItems :: forall xs. IsEmpty xs False => ListProxy xs -> ListProxy xs
+mustHaveItems = identity
+
+items = mustHaveItems ( ListProxy :: ListProxy ( TypeItem Int :> Nil' ) )
 ```
