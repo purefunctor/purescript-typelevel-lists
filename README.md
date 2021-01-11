@@ -13,7 +13,7 @@ import Type.Data.List
 -- Membership testing
 type Allowed = ( TypeItem Int :> TypeItem String :> Nil' )
 
-verify :: forall t. Member ( TypeItem t ) Allowed => t -> t
+verify :: forall t. IsMember ( TypeItem t ) Allowed True => t -> t
 verify = identity
 
 verifyInt = verify 42

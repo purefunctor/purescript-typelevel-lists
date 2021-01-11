@@ -6,7 +6,7 @@ module Type.Data.List
   , type (:>)
   , TypeItem
   , SymbolItem
-  , class Member
+  , class IsMember
   , class Concat
   , class IsEmpty
   , ListProxy(..)
@@ -47,16 +47,21 @@ foreign import data SymbolItem :: Symbol -> Item'
 
 
 -- | A typeclass for membership tests.
-class Member ( x :: Item' ) ( xs :: List' )
+class IsMember ( x :: Item' ) ( xs :: List' ) ( r :: Boolean ) | x xs -> r
 
+
+-- | Base case, `Nil'`s have no items.
+instance isMemberNil :: IsMember x Nil' False
+
+else
 
 -- | Matches the next item in the `List'`.
-instance memberNext :: Member x (x :> xs)
+instance isMemberNext :: IsMember x (x :> xs) True
 
 else
 
 -- | Recurses deeper into the `List'`.
-instance memberRec :: Member x ys => Member x (y :> ys)
+instance isMemberRec :: IsMember x ys r => IsMember x (y :> ys) r
 
 
 -- | A typeclass for `List'` concatenation
