@@ -8,11 +8,14 @@ module Type.Data.List
   , SymbolItem
   , class Member
   , class Concat
-  , class Empty
+  , class IsEmpty
   , ListProxy(..)
   , ItemProxy(..)
   )
   where
+
+
+import Prim.Boolean (kind Boolean, True, False)
 
 
 -- | The kind of the type-level list.
@@ -69,11 +72,17 @@ else
 instance concatRec :: Concat xs ys zs => Concat (x :> xs) ys (x :> zs)
 
 
--- | A typeclass that checks for empty `List'`s.
-class Empty ( xs :: List' )
+-- | Determines whether `List'` is empty.
+class IsEmpty ( xs :: List' ) ( r :: Boolean ) | xs -> r
 
 
-instance emptyList :: Empty Nil'
+-- | `Nil'`s are inherently empty.
+instance nilIsEmpty :: IsEmpty Nil' True
+
+else
+
+-- | Any other `List'` isn't empty.
+instance listIsEmpty :: IsEmpty (x :> xs) False
 
 
 -- | A value-level proxy for `List'`
