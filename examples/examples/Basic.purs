@@ -70,3 +70,19 @@ length _ = IProxy
 
 peano :: IProxy P2
 peano = length (ListProxy :: _ (TypeItem String :> TypeItem Char :> Nil'))
+
+
+-- Take an `n` amount of items.
+take :: forall n xs ys. Take n xs ys => IProxy n -> ListProxy xs -> ListProxy ys
+take _ _ = ListProxy
+
+took :: ListProxy (TypeItem Int :> TypeItem Char :> Nil')
+took = take (IProxy :: _ P2) (ListProxy :: _ (TypeItem Int :> TypeItem Char :> TypeItem String :> Nil'))
+
+
+-- Drop an `n` amount of items.
+drop :: forall n xs ys. Drop n xs ys => IProxy n -> ListProxy xs -> ListProxy ys
+drop _ _ = ListProxy
+
+remains :: ListProxy (TypeItem String :> TypeItem Int :> Nil')
+remains = drop (IProxy :: _ P2) (ListProxy :: _ (TypeItem Int :> TypeItem Char :> TypeItem String :> TypeItem Int :> Nil'))

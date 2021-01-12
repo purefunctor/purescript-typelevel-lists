@@ -15,6 +15,8 @@ module Type.Data.List
   , class Last
   , class Length
   , class Length'
+  , class Take
+  , class Drop
   , ListProxy(..)
   , ItemProxy(..)
   )
@@ -141,6 +143,42 @@ class Length ( xs :: List' ) ( r :: Peano.Int ) | xs -> r
 
 
 instance lengthList :: Length' xs (Peano.Pos Peano.Z) r => Length xs r
+
+
+-- | Takes an `n` amount of `Item'`s from a `List'`.
+class Take ( n :: Peano.Int ) ( xs :: List' ) ( ys :: List' ) | n xs -> ys
+
+
+instance takeZero :: Take (Peano.Pos Peano.Z) xs Nil'
+
+else
+
+instance takeNil :: Take n Nil' Nil'
+
+else
+
+instance takeRec ::
+  ( Peano.SumInt n (Peano.Neg (Peano.Succ Peano.Z)) m
+  , Take m xs ys
+  ) => Take n (x :> xs) (x :> ys)
+
+
+-- | Drops an `n` amount of `Item'`s from a `List'`.
+class Drop ( n :: Peano.Int ) ( xs :: List' ) ( ys :: List' ) | n ys -> ys
+
+
+instance dropZero :: Drop (Peano.Pos Peano.Z) xs xs
+
+else
+
+instance dropNil :: Drop n Nil' Nil'
+
+else
+
+instance dropRec ::
+  ( Peano.SumInt n (Peano.Neg (Peano.Succ Peano.Z)) m
+  , Drop m xs ys
+  ) => Drop n (x :> xs) ys
 
 
 -- | A value-level proxy for `List'`
