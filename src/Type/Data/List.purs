@@ -10,6 +10,8 @@ module Type.Data.List
   , class IsMember
   , class Concat
   , class IsEmpty
+  , class Init
+  , class Init'
   , ListProxy(..)
   , ItemProxy(..)
   )
@@ -93,6 +95,27 @@ else
 
 -- | Any other `List'` isn't empty.
 instance listIsEmpty :: IsEmpty (x :> xs) False
+
+
+-- | Internal type class that acts as an accumulator.
+class Init' ( xs :: Item' ) ( ys :: List' ) ( zs :: List' ) | xs ys -> zs
+
+
+-- | Reflect RHS if given `Nil` on the RHS.
+instance initBase :: Init' xs Nil' Nil'
+
+else
+
+-- | Recursively collect items until the end.
+instance initRec :: (Init' z zs ws) => Init' y (z :> zs) (y :> ws)
+
+
+-- | Takes the `init` items of a `List'`.
+class Init ( xs :: List' ) ( ys :: List' ) | xs -> ys
+
+
+-- | Recursively collects items using `Init'`.
+instance initList :: Init' x xs ys => Init (x :> xs) ys
 
 
 -- | A value-level proxy for `List'`

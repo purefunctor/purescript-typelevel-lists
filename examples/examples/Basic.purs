@@ -43,3 +43,13 @@ mustHaveItems = identity
 
 items :: ListProxy ( TypeItem Int :> Nil' )
 items = mustHaveItems ( ListProxy :: ListProxy ( TypeItem Int :> Nil' ) )
+
+
+-- Deconstruction through `Init`.
+type Types = (TypeItem String :> TypeItem Char :> TypeItem Int :> Nil')
+
+init :: forall j k. Init j k => ListProxy j -> ListProxy k
+init _ = ListProxy
+
+trunc :: ListProxy (TypeItem String :> TypeItem Char :> Nil')
+trunc = init (ListProxy :: _ Types)
