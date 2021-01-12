@@ -25,15 +25,15 @@ import Prim.Boolean (kind Boolean, True, False)
 import Type.Data.Peano as Peano
 
 
--- | The kind of the type-level list.
+-- | Represents the type-level list.
 foreign import kind List'
 
 
--- | The kind of the type-level list items.
+-- | Represents type-level list items.
 foreign import kind Item'
 
 
--- | Represents an empty type-level list.
+-- | Represents an empty `List'`.
 foreign import data Nil' :: List'
 
 
@@ -41,7 +41,6 @@ foreign import data Nil' :: List'
 foreign import data Cons' :: Item' -> List' -> List'
 
 
--- | Infix synonym for `Cons'`.
 infixr 1 type Cons' as :>
 
 
@@ -61,17 +60,14 @@ foreign import data BooleanItem :: Boolean -> Item'
 class IsMember ( x :: Item' ) ( xs :: List' ) ( r :: Boolean ) | x xs -> r
 
 
--- | Base case, `Nil'`s have no items.
 instance isMemberNil :: IsMember x Nil' False
 
 else
 
--- | Matches the next item in the `List'`.
 instance isMemberNext :: IsMember x (x :> xs) True
 
 else
 
--- | Recurses deeper into the `List'`.
 instance isMemberRec :: IsMember x ys r => IsMember x (y :> ys) r
 
 
@@ -79,12 +75,10 @@ instance isMemberRec :: IsMember x ys r => IsMember x (y :> ys) r
 class Concat ( xs :: List' ) ( ys :: List' ) ( zs :: List' ) | xs ys -> zs
 
 
--- | Reflects RHS if given `Nil'` on the LHS.
 instance concatNil :: Concat Nil' ys ys
 
 else
 
--- | Recursivelly concatenates two `List'`s.
 instance concatRec :: Concat xs ys zs => Concat (x :> xs) ys (x :> zs)
 
 
@@ -92,12 +86,10 @@ instance concatRec :: Concat xs ys zs => Concat (x :> xs) ys (x :> zs)
 class IsEmpty ( xs :: List' ) ( r :: Boolean ) | xs -> r
 
 
--- | `Nil'`s are inherently empty.
 instance nilIsEmpty :: IsEmpty Nil' True
 
 else
 
--- | Any other `List'` isn't empty.
 instance listIsEmpty :: IsEmpty (x :> xs) False
 
 
@@ -105,12 +97,10 @@ instance listIsEmpty :: IsEmpty (x :> xs) False
 class Init' ( xs :: Item' ) ( ys :: List' ) ( zs :: List' ) | xs ys -> zs
 
 
--- | Reflect RHS if given `Nil` on the RHS.
 instance initBase :: Init' xs Nil' Nil'
 
 else
 
--- | Recursively collect items until the end.
 instance initRec :: (Init' z zs ws) => Init' y (z :> zs) (y :> ws)
 
 
@@ -118,7 +108,6 @@ instance initRec :: (Init' z zs ws) => Init' y (z :> zs) (y :> ws)
 class Init ( xs :: List' ) ( ys :: List' ) | xs -> ys
 
 
--- | Recursively collects items using `Init'`.
 instance initList :: Init' x xs ys => Init (x :> xs) ys
 
 
@@ -126,12 +115,10 @@ instance initList :: Init' x xs ys => Init (x :> xs) ys
 class Last ( xs :: List' ) ( x :: Item' ) | xs -> x
 
 
--- | The last item is always `Cons'`ed to a `Nil'`.
 instance lastBase :: Last (x :> Nil') x
 
 else
 
--- | Recursively search until the base case is hit.
 instance lastRec :: Last xs ys => Last (x :> xs) ys
 
 
@@ -139,12 +126,10 @@ instance lastRec :: Last xs ys => Last (x :> xs) ys
 class Length' ( xs :: List' ) ( n :: Peano.Int ) ( r :: Peano.Int ) | xs n -> r
 
 
--- | `Nil'` is zero-length
 instance lengthBase :: Length' Nil' n n
 
 else
 
--- | Recursively accumulate until the base case is hit.
 instance lengthRec ::
   ( Peano.SumInt n (Peano.Pos (Peano.Succ Peano.Z)) m
   , Length' xs m r
