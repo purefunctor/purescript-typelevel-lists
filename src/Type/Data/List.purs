@@ -12,6 +12,7 @@ module Type.Data.List
   , class IsEmpty
   , class Init
   , class Init'
+  , class Last
   , ListProxy(..)
   , ItemProxy(..)
   )
@@ -116,6 +117,19 @@ class Init ( xs :: List' ) ( ys :: List' ) | xs -> ys
 
 -- | Recursively collects items using `Init'`.
 instance initList :: Init' x xs ys => Init (x :> xs) ys
+
+
+-- | Returns the last item of a `List'`.
+class Last ( xs :: List' ) ( x :: Item' ) | xs -> x
+
+
+-- | The last item is always `Cons'`ed to a `Nil'`.
+instance lastBase :: Last (x :> Nil') x
+
+else
+
+-- | Recursively search until the base case is hit.
+instance lastRec :: Last xs ys => Last (x :> xs) ys
 
 
 -- | A value-level proxy for `List'`

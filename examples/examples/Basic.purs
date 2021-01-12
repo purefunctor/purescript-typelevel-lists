@@ -53,3 +53,11 @@ init _ = ListProxy
 
 trunc :: ListProxy (TypeItem String :> TypeItem Char :> Nil')
 trunc = init (ListProxy :: _ Types)
+
+
+-- Deconstruction through `Last`.
+last :: forall j i. Last j i => ListProxy j -> ItemProxy i
+last _ = ItemProxy
+
+final :: ItemProxy (TypeItem Int)
+final = last (ListProxy :: _ Types)
