@@ -4,6 +4,7 @@ import Prelude
 
 import Prim.Boolean
 import Type.Data.List
+import Type.Data.Peano
 
 
 -- Membership testing
@@ -61,3 +62,11 @@ last _ = ItemProxy
 
 final :: ItemProxy (TypeItem Int)
 final = last (ListProxy :: _ Types)
+
+
+-- List lengths through `typelevel-peano`.
+length :: forall xs r. Length xs r => ListProxy xs -> IProxy r
+length _ = IProxy
+
+peano :: IProxy P2
+peano = length (ListProxy :: _ (TypeItem String :> TypeItem Char :> Nil'))

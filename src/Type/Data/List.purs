@@ -13,6 +13,8 @@ module Type.Data.List
   , class Init
   , class Init'
   , class Last
+  , class Length
+  , class Length'
   , ListProxy(..)
   , ItemProxy(..)
   )
@@ -20,6 +22,7 @@ module Type.Data.List
 
 
 import Prim.Boolean (kind Boolean, True, False)
+import Type.Data.Peano as Peano
 
 
 -- | The kind of the type-level list.
@@ -130,6 +133,29 @@ else
 
 -- | Recursively search until the base case is hit.
 instance lastRec :: Last xs ys => Last (x :> xs) ys
+
+
+-- | Internal type that acts as an accumulator
+class Length' ( xs :: List' ) ( n :: Peano.Int ) ( r :: Peano.Int ) | xs n -> r
+
+
+-- | `Nil'` is zero-length
+instance lengthBase :: Length' Nil' n n
+
+else
+
+-- | Recursively accumulate until the base case is hit.
+instance lengthRec ::
+  ( Peano.SumInt n (Peano.Pos (Peano.Succ Peano.Z)) m
+  , Length' xs m r
+  ) => Length' (x :> xs) n r
+
+
+-- | Computes the length of a `List'` as a `Type.Data.Peano.Int`
+class Length ( xs :: List' ) ( r :: Peano.Int ) | xs -> r
+
+
+instance lengthList :: Length' xs (Peano.Pos Peano.Z) r => Length xs r
 
 
 -- | A value-level proxy for `List'`
