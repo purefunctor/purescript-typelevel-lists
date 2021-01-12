@@ -1,0 +1,11 @@
+{
+  "name": "purescript-typelevel-lists",
+  "version": "0.0.1",
+  "description": "Type-level heterogenous list of kinds for PureScript.",
+  "scripts": {
+    "repl": "spago -x examples/examples.dhall repl"
+  },
+  "repository": "git@github.com:PureFunctor/purescript-typelevel-lists.git",
+  "author": "PureFunctor <purefunctor@gmail.com>",
+  "license": "BSD-3-License"
+}
