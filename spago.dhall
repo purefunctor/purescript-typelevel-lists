@@ -3,7 +3,7 @@ Welcome to a Spago project!
 You can edit this file as you like.
 -}
 { name = "typelevel-lists"
-, dependencies = [ "console", "effect", "psci-support" ]
+, dependencies = [ ] : List Text
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs" ]
 , license = "BSD-3-Clause"
