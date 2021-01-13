@@ -21,7 +21,7 @@ let upstream =
 let additions =
   { typelevel-lists =
     { repo = "https://github.com/PureFunctor/purescript-typelevel-lists.git"
-    , version = "v0.3.0"
+    , version = "v0.3.1"
     , dependencies = [ "typelevel-peano" ]
     }
   }
