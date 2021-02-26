@@ -28,7 +28,8 @@ import Type.Data.Peano as Peano
 
 
 -- | Represents the type-level list.
-data List'
+data List' :: forall k. k -> Type
+data List' a
 
 
 -- | Represents type-level list items.
@@ -36,11 +37,11 @@ data Item'
 
 
 -- | Represents an empty `List'`.
-foreign import data Nil' :: List'
+foreign import data Nil' :: forall k. List' k
 
 
 -- | Prepends any `Item'` to a `List'`, creating a new `List'`.
-foreign import data Cons' :: Item' -> List' -> List'
+foreign import data Cons' :: forall k. k -> List' k -> List' k
 
 
 infixr 1 type Cons' as :>
@@ -59,7 +60,8 @@ foreign import data BooleanItem :: Boolean -> Item'
 
 
 -- | Performs membership testing given an `Item'` and a `List'`.
-class IsMember ( x :: Item' ) ( xs :: List' ) ( r :: Boolean ) | x xs -> r
+class IsMember :: forall k. k -> List' k -> Boolean -> Constraint
+class IsMember x xs r | x xs -> r
 
 
 instance isMemberNil :: IsMember x Nil' False
@@ -74,7 +76,8 @@ instance isMemberRec :: IsMember x ys r => IsMember x (y :> ys) r
 
 
 -- | Concatenates two `List'`s together.
-class Concat ( xs :: List' ) ( ys :: List' ) ( zs :: List' ) | xs ys -> zs
+class Concat :: forall k. List' k -> List' k -> List' k -> Constraint
+class Concat xs ys zs | xs ys -> zs
 
 
 instance concatNil :: Concat Nil' ys ys
@@ -85,7 +88,8 @@ instance concatRec :: Concat xs ys zs => Concat (x :> xs) ys (x :> zs)
 
 
 -- | Determines whether `List'` is empty.
-class IsEmpty ( xs :: List' ) ( r :: Boolean ) | xs -> r
+class IsEmpty :: forall k. List' k -> Boolean -> Constraint
+class IsEmpty xs r | xs -> r
 
 
 instance nilIsEmpty :: IsEmpty Nil' True
@@ -96,7 +100,8 @@ instance listIsEmpty :: IsEmpty (x :> xs) False
 
 
 -- | Internal type class that acts as an accumulator.
-class Init' ( xs :: Item' ) ( ys :: List' ) ( zs :: List' ) | xs ys -> zs
+class Init' :: forall k. k -> List' k -> List' k -> Constraint
+class Init' xs ys zs | xs ys -> zs
 
 
 instance initBase :: Init' xs Nil' Nil'
@@ -107,14 +112,16 @@ instance initRec :: (Init' z zs ws) => Init' y (z :> zs) (y :> ws)
 
 
 -- | Takes the `init` items of a `List'`.
-class Init ( xs :: List' ) ( ys :: List' ) | xs -> ys
+class Init :: forall k. List' k -> List' k -> Constraint
+class Init xs ys | xs -> ys
 
 
 instance initList :: Init' x xs ys => Init (x :> xs) ys
 
 
 -- | Returns the last item of a `List'`.
-class Last ( xs :: List' ) ( x :: Item' ) | xs -> x
+class Last :: forall k. List' k -> k -> Constraint
+class Last xs x | xs -> x
 
 
 instance lastBase :: Last (x :> Nil') x
@@ -125,7 +132,8 @@ instance lastRec :: Last xs ys => Last (x :> xs) ys
 
 
 -- | Internal type that acts as an accumulator
-class Length' ( xs :: List' ) ( n :: Peano.Int ) ( r :: Peano.Int ) | xs n -> r
+class Length' :: forall k. List' k -> Peano.Int -> Peano.Int -> Constraint
+class Length' xs n r | xs n -> r
 
 
 instance lengthBase :: Length' Nil' n n
@@ -139,14 +147,16 @@ instance lengthRec ::
 
 
 -- | Computes the length of a `List'` as a `Type.Data.Peano.Int`
-class Length ( xs :: List' ) ( r :: Peano.Int ) | xs -> r
+class Length :: forall k. List' k -> Peano.Int -> Constraint
+class Length xs r | xs -> r
 
 
 instance lengthList :: Length' xs (Peano.Pos Peano.Z) r => Length xs r
 
 
 -- | Takes an `n` amount of `Item'`s from a `List'`.
-class Take ( n :: Peano.Int ) ( xs :: List' ) ( ys :: List' ) | n xs -> ys
+class Take :: forall k. Peano.Int -> List' k -> List' k -> Constraint
+class Take n xs ys | n xs -> ys
 
 
 instance takeZero :: Take (Peano.Pos Peano.Z) xs Nil'
@@ -164,7 +174,8 @@ instance takeRec ::
 
 
 -- | Drops an `n` amount of `Item'`s from a `List'`.
-class Drop ( n :: Peano.Int ) ( xs :: List' ) ( ys :: List' ) | n ys -> ys
+class Drop :: forall k. Peano.Int -> List' k -> List' k -> Constraint
+class Drop n xs ys | n xs -> ys
 
 
 instance dropZero :: Drop (Peano.Pos Peano.Z) xs xs
@@ -182,7 +193,8 @@ instance dropRec ::
 
 
 -- | A value-level proxy for `List'`
-data ListProxy (l :: List') = ListProxy
+data ListProxy :: forall k. List' k -> Type
+data ListProxy (l :: List' k) = ListProxy
 
 
 -- | A value-level proxy for `Item'`
