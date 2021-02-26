@@ -145,7 +145,7 @@ instance lengthBase :: Length' Nil' n n
 else
 
 instance lengthRec ::
-  ( Peano.SumInt n (Peano.Pos (Peano.Succ Peano.Z)) m
+  ( Peano.SumInt n Peano.P1 m
   , Length' xs m r
   ) => Length' (x :> xs) n r
 
@@ -155,7 +155,7 @@ class Length :: forall k. List' k -> Peano.Int -> Constraint
 class Length xs r | xs -> r
 
 
-instance lengthList :: Length' xs (Peano.Pos Peano.Z) r => Length xs r
+instance lengthList :: Length' xs Peano.P0 r => Length xs r
 
 
 -- | Takes an `n` amount of `Item'`s from a `List'`.
@@ -163,7 +163,7 @@ class Take :: forall k. Peano.Int -> List' k -> List' k -> Constraint
 class Take n xs ys | n xs -> ys
 
 
-instance takeZero :: Take (Peano.Pos Peano.Z) xs Nil'
+instance takeZero :: Take Peano.P0 xs Nil'
 
 else
 
@@ -172,7 +172,7 @@ instance takeNil :: Take n Nil' Nil'
 else
 
 instance takeRec ::
-  ( Peano.SumInt n (Peano.Neg (Peano.Succ Peano.Z)) m
+  ( Peano.SumInt n Peano.N1 m
   , Take m xs ys
   ) => Take n (x :> xs) (x :> ys)
 
@@ -182,7 +182,7 @@ class Drop :: forall k. Peano.Int -> List' k -> List' k -> Constraint
 class Drop n xs ys | n xs -> ys
 
 
-instance dropZero :: Drop (Peano.Pos Peano.Z) xs xs
+instance dropZero :: Drop Peano.P0 xs xs
 
 else
 
@@ -191,7 +191,7 @@ instance dropNil :: Drop n Nil' Nil'
 else
 
 instance dropRec ::
-  ( Peano.SumInt n (Peano.Neg (Peano.Succ Peano.Z)) m
+  ( Peano.SumInt n Peano.N1 m
   , Drop m xs ys
   ) => Drop n (x :> xs) ys
 
