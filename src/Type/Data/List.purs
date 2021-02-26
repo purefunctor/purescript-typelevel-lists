@@ -1,7 +1,7 @@
 -- | Type-level heterogenous list of kinds for PureScript
 module Type.Data.List
-  ( kind List'
-  , kind Item'
+  ( List'
+  , Item'
   , Nil'
   , Cons'
   , type (:>)
@@ -23,16 +23,16 @@ module Type.Data.List
   where
 
 
-import Prim.Boolean (kind Boolean, True, False)
+import Prim.Boolean (True, False)
 import Type.Data.Peano as Peano
 
 
 -- | Represents the type-level list.
-foreign import kind List'
+data List'
 
 
 -- | Represents type-level list items.
-foreign import kind Item'
+data Item'
 
 
 -- | Represents an empty `List'`.
