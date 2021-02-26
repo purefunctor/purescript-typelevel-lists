@@ -59,6 +59,10 @@ foreign import data SymbolItem :: Symbol -> Item'
 foreign import data BooleanItem :: Boolean -> Item'
 
 
+-- | Wraps any kind into an `Item'`.
+foreign import data AnyItem :: forall k. k -> Item'
+
+
 -- | Performs membership testing given an `Item'` and a `List'`.
 class IsMember :: forall k. k -> List' k -> Boolean -> Constraint
 class IsMember x xs r | x xs -> r
