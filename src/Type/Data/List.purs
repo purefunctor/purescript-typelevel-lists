@@ -14,13 +14,16 @@ module Type.Data.List
   , class Length'
   , class Take
   , class Drop
+  , class Hom
   , ListProxy(..)
+  , IsSameKind
   )
   where
 
 
 import Prim.Boolean (True, False)
 import Type.Data.Peano as Peano
+import Type.Equality (class TypeEquals)
 
 
 -- | Represents the type-level list.
@@ -162,6 +165,25 @@ instance dropRec ::
   ( Peano.SumInt n Peano.N1 m
   , Drop m xs ys
   ) => Drop n (x :> xs) ys
+
+
+-- | Checks whether two types have the same kind.
+foreign import data IsSameKind :: forall k. k -> k -> Type
+
+
+-- | Ensures that a `List'` contains only one kind `k`.
+class Hom :: forall k. k -> List' -> List' -> Constraint
+class Hom k xs ys | k xs -> ys
+
+
+instance homNil :: Hom k Nil' Nil'
+
+else
+
+instance homRec ::
+  ( TypeEquals (IsSameKind k x) (IsSameKind k x)
+  , Hom k xs xs
+  ) => Hom k (x :> xs) (x :> xs)
 
 
 -- | A value-level proxy for `List'`
