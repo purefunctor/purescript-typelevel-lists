@@ -14,6 +14,6 @@
     "output"
   ],
   "dependencies": {
-    "purescript-typelevel-peano": "master"
+    "purescript-typelevel-peano": "v1.0.1"
   }
 }
