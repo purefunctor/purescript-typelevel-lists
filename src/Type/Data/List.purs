@@ -14,11 +14,13 @@ module Type.Data.List
   , class Length'
   , class Take
   , class Drop
+  , class Zip
   , ListProxy(..)
   )
   where
 
 
+import Data.Tuple (Tuple)
 import Prim.Boolean (True, False)
 import Type.Data.Peano as Peano
 
@@ -162,6 +164,23 @@ instance dropRec ::
   ( Peano.SumInt n Peano.N1 m
   , Drop m xs ys
   ) => Drop n (x :> xs) ys
+
+
+-- | Zips together two `List'`s.
+class Zip (x :: List') (y :: List') (z :: List') | x y -> z
+
+
+instance zipLhsNil :: Zip Nil' y Nil'
+
+else
+
+instance zipRhsNil :: Zip x Nil' Nil'
+
+else
+
+instance zipRec ::
+  ( Zip xs ys zs
+  ) => Zip ( x :> xs ) ( y :> ys ) ( Tuple x y :> zs )
 
 
 -- | A value-level proxy for `List'`

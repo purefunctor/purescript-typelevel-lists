@@ -2,6 +2,7 @@ module Basic where
 
 import Prelude
 
+import Data.Tuple.Nested (type (/\))
 import Prim.Boolean (False, True)
 import Type.Data.List (class Concat, class Drop, class Init, class IsEmpty, class IsMember, class Last, class Length, class Take, type (:>), ListProxy(..), Nil')
 import Type.Data.Peano (IProxy(..), P2)
@@ -87,3 +88,17 @@ drop _ _ = ListProxy
 
 remains :: ListProxy (String :> Int :> Nil')
 remains = drop (IProxy :: _ P2) (ListProxy :: _ (Int :> Char :> String :> Int :> Nil'))
+
+
+-- Zips together two lists.
+zip :: forall xs ys zs. Proxy xs -> Proxy ys -> Proxy zs
+zip  _ _ = Proxy
+
+es :: Proxy ( String :> Char :> Nil' )
+es = Proxy
+
+fs :: Proxy ( Boolean :> Int :> Nil' )
+fs = Proxy
+
+gs :: Proxy ( ( String /\ Boolean ) :> ( Char /\ Int ) :> Nil' )
+gs = zip es fs
