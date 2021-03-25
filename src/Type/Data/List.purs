@@ -15,6 +15,7 @@ module Type.Data.List
   , class Take
   , class Drop
   , class Zip
+  , class Map
   , ListProxy(..)
   )
   where
@@ -181,6 +182,20 @@ else
 instance zipRec ::
   ( Zip xs ys zs
   ) => Zip ( x :> xs ) ( y :> ys ) ( Tuple x y :> zs )
+
+
+-- | Maps a type constructor to a `List'`.
+class Map :: forall f. f -> List' -> List' -> Constraint
+class Map f xs ys | f xs -> ys
+
+
+instance mapNil :: Map f Nil' Nil'
+
+else
+
+instance mapRec ::
+  ( Map f xs ys
+  ) => Map f ( x :> xs ) ( f x :> ys )
 
 
 -- | A value-level proxy for `List'`

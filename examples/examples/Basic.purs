@@ -4,7 +4,7 @@ import Prelude
 
 import Data.Tuple.Nested (type (/\))
 import Prim.Boolean (False, True)
-import Type.Data.List (class Concat, class Drop, class Init, class IsEmpty, class IsMember, class Last, class Length, class Take, class Zip, type (:>), ListProxy(..), Nil')
+import Type.Data.List (class Concat, class Drop, class Init, class IsEmpty, class IsMember, class Last, class Length, class Map, class Take, class Zip, type (:>), ListProxy(..), Nil')
 import Type.Data.Peano (IProxy(..), P2)
 import Type.Proxy (Proxy(..))
 
@@ -102,3 +102,16 @@ fs = Proxy
 
 gs :: Proxy ( ( String /\ Boolean ) :> ( Char /\ Int ) :> Nil' )
 gs = zip es fs
+
+
+-- Maps a type constructor over a list.
+map_ :: forall xs ys. Map Array xs ys => Proxy xs -> Proxy ys
+map_ _ = Proxy
+
+
+qs :: Proxy ( Char :> Int :> Nil' )
+qs = Proxy
+
+
+ws :: Proxy ( Array Char :> Array Int :> Nil' )
+ws = map_ qs
