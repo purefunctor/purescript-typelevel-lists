@@ -27,7 +27,7 @@ import Prim.Boolean (True, False)
 import Type.Data.Peano as Peano
 
 
--- | Represents the type-level list.
+-- | Represents a type-level list.
 data List'
 
 
@@ -35,14 +35,14 @@ data List'
 foreign import data Nil' :: List'
 
 
--- | Prepends any `Item'` to a `List'`, creating a new `List'`.
+-- | Prepends an item to a `List'`, creating a new `List'`.
 foreign import data Cons' :: forall k. k -> List' -> List'
 
 
 infixr 1 type Cons' as :>
 
 
--- | Performs membership testing given an `Item'` and a `List'`.
+-- | Performs membership testing given an item and a `List'`.
 class IsMember :: forall k. k -> List' -> Boolean -> Constraint
 class IsMember x xs r | x xs -> r
 
@@ -132,7 +132,7 @@ class Length (xs :: List') (r :: Peano.Int) | xs -> r
 instance lengthList :: Length' xs Peano.P0 r => Length xs r
 
 
--- | Takes an `n` amount of `Item'`s from a `List'`.
+-- | Takes an `n` amount of items from a `List'`.
 class Take (n :: Peano.Int) (xs :: List') (ys :: List') | n xs -> ys
 
 
@@ -150,7 +150,7 @@ instance takeRec ::
   ) => Take n (x :> xs) (x :> ys)
 
 
--- | Drops an `n` amount of `Item'`s from a `List'`.
+-- | Drops an `n` amount of items from a `List'`.
 class Drop (n :: Peano.Int) (xs :: List') (ys :: List') | n xs -> ys
 
 
