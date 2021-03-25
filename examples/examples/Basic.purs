@@ -4,7 +4,7 @@ import Prelude
 
 import Data.Tuple.Nested (type (/\))
 import Prim.Boolean (False, True)
-import Type.Data.List (class Concat, class Drop, class Init, class IsEmpty, class IsMember, class Last, class Length, class Take, type (:>), ListProxy(..), Nil')
+import Type.Data.List (class Concat, class Drop, class Init, class IsEmpty, class IsMember, class Last, class Length, class Take, class Zip, type (:>), ListProxy(..), Nil')
 import Type.Data.Peano (IProxy(..), P2)
 import Type.Proxy (Proxy(..))
 
@@ -91,8 +91,8 @@ remains = drop (IProxy :: _ P2) (ListProxy :: _ (Int :> Char :> String :> Int :>
 
 
 -- Zips together two lists.
-zip :: forall xs ys zs. Proxy xs -> Proxy ys -> Proxy zs
-zip  _ _ = Proxy
+zip :: forall xs ys zs. Zip xs ys zs => Proxy xs -> Proxy ys -> Proxy zs
+zip _ _ = Proxy
 
 es :: Proxy ( String :> Char :> Nil' )
 es = Proxy
