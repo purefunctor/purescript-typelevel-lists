@@ -16,6 +16,7 @@ module Type.Data.List
   , class Drop
   , class Zip
   , class Map
+  , class Fold
   , ListProxy(..)
   )
   where
@@ -196,6 +197,20 @@ else
 instance mapRec ::
   ( Map f xs ys
   ) => Map f ( x :> xs ) ( f x :> ys )
+
+
+-- | Folds a `List'` into a singular value
+class Fold :: forall f z. f -> z -> List' -> z -> Constraint
+class Fold f z xs r | f z xs -> r
+
+
+instance foldNil :: Fold f z Nil' z
+
+else
+
+instance foldRec ::
+  ( Fold f ( f z x ) xs r
+  ) => Fold f z ( x :> xs ) r
 
 
 -- | A value-level proxy for `List'`

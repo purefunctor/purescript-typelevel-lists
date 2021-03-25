@@ -2,9 +2,10 @@ module Basic where
 
 import Prelude
 
+import Data.Tuple (Tuple)
 import Data.Tuple.Nested (type (/\))
 import Prim.Boolean (False, True)
-import Type.Data.List (class Concat, class Drop, class Init, class IsEmpty, class IsMember, class Last, class Length, class Map, class Take, class Zip, type (:>), ListProxy(..), Nil')
+import Type.Data.List (class Concat, class Drop, class Init, class IsEmpty, class IsMember, class Last, class Length, class Map, class Take, class Zip, class Fold, type (:>), ListProxy(..), Nil')
 import Type.Data.Peano (IProxy(..), P2)
 import Type.Proxy (Proxy(..))
 
@@ -115,3 +116,16 @@ qs = Proxy
 
 ws :: Proxy ( Array Char :> Array Int :> Nil' )
 ws = map_ qs
+
+
+-- Folds a list into a singular value.
+fold_ :: forall xs r. Fold Tuple Int xs r => Proxy xs -> Proxy r
+fold_ _ = Proxy
+
+
+vs :: Proxy ( String :> Number :> Nil' )
+vs = Proxy
+
+
+hs :: Proxy ( ( Int /\ String ) /\ Number )
+hs = fold_ vs
