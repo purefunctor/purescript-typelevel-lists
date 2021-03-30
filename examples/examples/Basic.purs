@@ -5,7 +5,23 @@ import Prelude
 import Data.Tuple (Tuple)
 import Data.Tuple.Nested (type (/\))
 import Prim.Boolean (False, True)
-import Type.Data.List (class Concat, class Drop, class Init, class IsEmpty, class IsMember, class Last, class Length, class Map, class Take, class Zip, class Fold, type (:>), ListProxy(..), Nil')
+import Type.Data.List
+  ( class Concat
+  , class Drop
+  , class Fold
+  , class Foldr
+  , class Init
+  , class IsEmpty
+  , class IsMember
+  , class Last
+  , class Length
+  , class Map
+  , class Take
+  , class Zip
+  , type (:>)
+  , ListProxy(..)
+  , Nil'
+  )
 import Type.Data.Peano (IProxy(..), P2)
 import Type.Proxy (Proxy(..))
 
@@ -118,7 +134,7 @@ ws :: Proxy ( Array Char :> Array Int :> Nil' )
 ws = map_ qs
 
 
--- Folds a list into a singular value.
+-- Folds a list into a singular value, left-associative.
 fold_ :: forall xs r. Fold Tuple Int xs r => Proxy xs -> Proxy r
 fold_ _ = Proxy
 
@@ -129,3 +145,12 @@ vs = Proxy
 
 hs :: Proxy ( ( Int /\ String ) /\ Number )
 hs = fold_ vs
+
+
+-- Folds a list into a singular value, right-associative.
+foldr :: forall xs r. Foldr Tuple Int xs r => Proxy xs -> Proxy r
+foldr _ = Proxy
+
+
+ts :: Proxy ( String /\ Number /\ Int )
+ts = foldr vs

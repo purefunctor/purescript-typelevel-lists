@@ -17,6 +17,7 @@ module Type.Data.List
   , class Zip
   , class Map
   , class Fold
+  , class Foldr
   , ListProxy(..)
   )
   where
@@ -199,7 +200,7 @@ instance mapRec ::
   ) => Map f ( x :> xs ) ( f x :> ys )
 
 
--- | Folds a `List'` into a singular value
+-- | Folds a `List'` into a singular value, left-associative.
 class Fold :: forall f z. f -> z -> List' -> z -> Constraint
 class Fold f z xs r | f z xs -> r
 
@@ -211,6 +212,25 @@ else
 instance foldRec ::
   ( Fold f ( f z x ) xs r
   ) => Fold f z ( x :> xs ) r
+
+
+-- | Folds a `List'` into a singular value, right-associative.
+class Foldr :: forall f z. f -> z -> List' -> z -> Constraint
+class Foldr f z xs r | f z xs -> r
+
+
+instance foldrNil :: Foldr f z Nil' z
+
+else
+
+instance foldrOne ::
+  Foldr f z ( x :> Nil' ) ( f x z )
+
+else
+
+instance foldrRec ::
+  ( Foldr f z xs r
+  ) => Foldr f z ( x :> xs ) ( f x r )
 
 
 -- | A value-level proxy for `List'`
