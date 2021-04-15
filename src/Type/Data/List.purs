@@ -25,8 +25,11 @@ module Type.Data.List
   , class Zip
   , zip
   , class Map
+  , map
   , class Fold
+  , fold
   , class Foldr
+  , foldr
   , ListProxy(..)
   )
   where
@@ -237,50 +240,59 @@ instance zipRec ::
 
 
 -- | Maps a type constructor to a `List'`.
-class Map :: forall f k. f -> List' k -> List' k -> Constraint
-class Map f xs ys | f xs -> ys
+class Map :: forall func k. func -> List' k -> List' k -> Constraint
+class Map f xs ys | f xs -> ys where
+  map :: forall fproxy lproxy. fproxy f -> lproxy xs -> lproxy ys
 
 
-instance mapNil :: Map f Nil' Nil'
+instance mapNil :: Map f Nil' Nil' where
+  map _ _ = unsafeCoerce unit
 
 else
 
 instance mapRec ::
   ( Map f xs ys
-  ) => Map f ( x :> xs ) ( f x :> ys )
+  ) => Map f ( x :> xs ) ( f x :> ys ) where
+  map _ _ = unsafeCoerce unit
 
 
 -- | Folds a `List'` into a singular value, left-associative.
-class Fold :: forall f z. f -> z -> List' z -> z -> Constraint
-class Fold f z xs r | f z xs -> r
+class Fold :: forall func k. func -> k -> List' k -> k -> Constraint
+class Fold f z xs r | f z xs -> r where
+  fold :: forall fproxy kproxy lproxy. fproxy f -> kproxy z -> lproxy xs -> kproxy r
 
 
-instance foldNil :: Fold f z Nil' z
+instance foldNil :: Fold f z Nil' z where
+  fold _ _ _ = unsafeCoerce unit
 
 else
 
 instance foldRec ::
   ( Fold f ( f z x ) xs r
-  ) => Fold f z ( x :> xs ) r
+  ) => Fold f z ( x :> xs ) r where
+  fold _ _ _ = unsafeCoerce unit
 
 
 -- | Folds a `List'` into a singular value, right-associative.
-class Foldr :: forall f z. f -> z -> List' z -> z -> Constraint
-class Foldr f z xs r | f z xs -> r
+class Foldr :: forall func k. func -> k -> List' k -> k -> Constraint
+class Foldr f z xs r | f z xs -> r where
+  foldr :: forall fproxy kproxy lproxy. fproxy f -> kproxy z -> lproxy xs -> kproxy r
 
 
-instance foldrNil :: Foldr f z Nil' z
+instance foldrNil :: Foldr f z Nil' z where
+  foldr _ _ _ = unsafeCoerce unit
 
 else
 
-instance foldrOne ::
-  Foldr f z ( x :> Nil' ) ( f x z )
+instance foldrOne :: Foldr f z ( x :> Nil' ) ( f x z ) where
+  foldr _ _ _ = unsafeCoerce unit
 
 else
 
 instance foldrRec ::
   ( Foldr f z xs r
-  ) => Foldr f z ( x :> xs ) ( f x r )
+  ) => Foldr f z ( x :> xs ) ( f x r ) where
+  foldr _ _ _ = unsafeCoerce unit
 
 
 -- | A value-level proxy for `List'`
