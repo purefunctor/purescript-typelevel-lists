@@ -1,9 +1,11 @@
-{-
-Welcome to a Spago project!
-You can edit this file as you like.
--}
 { name = "typelevel-lists"
-, dependencies = [ "tuples", "typelevel-peano" ]
+, dependencies =
+  [ "prelude"
+  , "tuples"
+  , "typelevel-peano"
+  , "typelevel-prelude"
+  , "unsafe-coerce"
+  ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs" ]
 , license = "BSD-3-Clause"
