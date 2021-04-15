@@ -3,7 +3,7 @@ Welcome to a Spago project!
 You can edit this file as you like.
 -}
 { name = "typelevel-lists"
-, dependencies = [ "typelevel-peano" ]
+, dependencies = [ "tuples", "typelevel-peano" ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs" ]
 , license = "BSD-3-Clause"
