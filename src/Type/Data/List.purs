@@ -41,22 +41,23 @@ import Unsafe.Coerce (unsafeCoerce)
 
 
 -- | Represents a type-level list.
-data List'
+data List' :: forall k. k -> Type
+data List' k
 
 
 -- | Represents an empty `List'`.
-foreign import data Nil' :: List'
+foreign import data Nil' :: forall k. List' k
 
 
 -- | Prepends an item to a `List'`, creating a new `List'`.
-foreign import data Cons' :: forall k. k -> List' -> List'
+foreign import data Cons' :: forall k. k -> List' k -> List' k
 
 
 infixr 1 type Cons' as :>
 
 
 -- | Performs membership testing given an item and a `List'`.
-class IsMember :: forall k. k -> List' -> Boolean -> Constraint
+class IsMember :: forall k. k -> List' k -> Boolean -> Constraint
 class IsMember x xs r | x xs -> r where
   isMember :: forall lproxy. Proxy x -> lproxy xs -> Boolean
 
@@ -76,7 +77,8 @@ instance isMemberRec :: IsMember x ys r => IsMember x (y :> ys) r where
 
 
 -- | Concatenates two `List'`s together.
-class Concat (xs :: List') (ys :: List') (zs :: List') | xs ys -> zs where
+class Concat :: forall k. List' k -> List' k -> List' k -> Constraint
+class Concat xs ys zs | xs ys -> zs where
   concat :: forall lproxy. lproxy xs -> lproxy ys -> lproxy zs
 
 
@@ -90,7 +92,8 @@ instance concatRec :: Concat xs ys zs => Concat (x :> xs) ys (x :> zs) where
 
 
 -- | Determines whether `List'` is empty.
-class IsEmpty (xs :: List') (r :: Boolean) | xs -> r where
+class IsEmpty :: forall k. List' k -> Boolean -> Constraint
+class IsEmpty xs r | xs -> r where
   isEmpty :: forall lproxy. lproxy xs -> Boolean
 
 
@@ -104,7 +107,7 @@ instance listIsEmpty :: IsEmpty (x :> xs) False where
 
 
 -- | Internal type class that acts as an accumulator.
-class Init' :: forall k. k -> List' -> List' -> Constraint
+class Init' :: forall k. k -> List' k -> List' k -> Constraint
 class Init' xs ys zs | xs ys -> zs
 
 
@@ -116,7 +119,8 @@ instance initRec :: (Init' z zs ws) => Init' y (z :> zs) (y :> ws)
 
 
 -- | Takes the `init` items of a `List'`.
-class Init (xs :: List') (ys :: List') | xs -> ys where
+class Init :: forall k. List' k -> List' k -> Constraint
+class Init xs ys | xs -> ys where
   init :: forall lproxy. lproxy xs -> lproxy ys
 
 
@@ -125,7 +129,7 @@ instance initList :: Init' x xs ys => Init (x :> xs) ys where
 
 
 -- | Returns the last item of a `List'`.
-class Last :: forall k. List' -> k -> Constraint
+class Last :: forall k. List' k -> k -> Constraint
 class Last xs x | xs -> x where
   last :: forall lproxy. lproxy xs -> Proxy x
 
@@ -140,7 +144,8 @@ instance lastRec :: Last xs ys => Last (x :> xs) ys where
 
 
 -- | Internal type that acts as an accumulator
-class Length' (xs :: List') (n :: Peano.Int) (r :: Peano.Int) | xs n -> r
+class Length' :: forall k. List' k -> Peano.Int -> Peano.Int -> Constraint
+class Length' xs n r | xs n -> r
 
 
 instance lengthBase :: Length' Nil' n n
@@ -154,7 +159,8 @@ instance lengthRec ::
 
 
 -- | Computes the length of a `List'` as a `Type.Data.Peano.Int`
-class Length (xs :: List') (r :: Peano.Int) | xs -> r where
+class Length :: forall k. List' k -> Peano.Int -> Constraint
+class Length xs r | xs -> r where
   length :: forall lproxy iproxy. lproxy xs -> iproxy r
 
 
@@ -163,7 +169,8 @@ instance lengthList :: Length' xs Peano.P0 r => Length xs r where
 
 
 -- | Takes an `n` amount of items from a `List'`.
-class Take (n :: Peano.Int) (xs :: List') (ys :: List') | n xs -> ys where
+class Take :: forall k. Peano.Int -> List' k -> List' k -> Constraint
+class Take n xs ys | n xs -> ys where
   take :: forall lproxy iproxy. iproxy n -> lproxy xs -> lproxy ys
 
 
@@ -185,7 +192,8 @@ instance takeRec ::
 
 
 -- | Drops an `n` amount of items from a `List'`.
-class Drop (n :: Peano.Int) (xs :: List') (ys :: List') | n xs -> ys where
+class Drop :: forall k. Peano.Int -> List' k -> List' k -> Constraint
+class Drop n xs ys | n xs -> ys where
   drop :: forall lproxy iproxy. iproxy n -> lproxy xs -> lproxy ys
 
 
@@ -207,7 +215,8 @@ instance dropRec ::
 
 
 -- | Zips together two `List'`s.
-class Zip (x :: List') (y :: List') (z :: List') | x y -> z where
+class Zip :: forall k. List' k -> List' k -> List' k -> Constraint
+class Zip x y z | x y -> z where
   zip :: forall lproxy. lproxy x -> lproxy y -> lproxy z
 
 
@@ -228,7 +237,7 @@ instance zipRec ::
 
 
 -- | Maps a type constructor to a `List'`.
-class Map :: forall f. f -> List' -> List' -> Constraint
+class Map :: forall f k. f -> List' k -> List' k -> Constraint
 class Map f xs ys | f xs -> ys
 
 
@@ -242,7 +251,7 @@ instance mapRec ::
 
 
 -- | Folds a `List'` into a singular value, left-associative.
-class Fold :: forall f z. f -> z -> List' -> z -> Constraint
+class Fold :: forall f z. f -> z -> List' z -> z -> Constraint
 class Fold f z xs r | f z xs -> r
 
 
@@ -256,7 +265,7 @@ instance foldRec ::
 
 
 -- | Folds a `List'` into a singular value, right-associative.
-class Foldr :: forall f z. f -> z -> List' -> z -> Constraint
+class Foldr :: forall f z. f -> z -> List' z -> z -> Constraint
 class Foldr f z xs r | f z xs -> r
 
 
@@ -275,4 +284,5 @@ instance foldrRec ::
 
 
 -- | A value-level proxy for `List'`
-data ListProxy (l :: List') = ListProxy
+data ListProxy :: forall k. List' k -> Type
+data ListProxy l = ListProxy
