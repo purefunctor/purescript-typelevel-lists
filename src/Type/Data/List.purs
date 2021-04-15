@@ -68,14 +68,12 @@ class IsMember x xs r | x xs -> r where
 instance isMemberNil :: IsMember x Nil' False where
   isMember _ _ = false
 
-else
-
-instance isMemberNext :: IsMember x (x :> xs) True where
+else instance isMemberNext :: IsMember x (x :> xs) True where
   isMember _ _ = true
 
-else
-
-instance isMemberRec :: IsMember x ys r => IsMember x (y :> ys) r where
+else instance isMemberRec
+  :: IsMember x ys r
+  => IsMember x (y :> ys) r where
   isMember x _ = isMember x (Proxy :: _ ys)
 
 
@@ -88,9 +86,9 @@ class Concat xs ys zs | xs ys -> zs where
 instance concatNil :: Concat Nil' ys ys where
   concat _ _ = unsafeCoerce unit
 
-else
-
-instance concatRec :: Concat xs ys zs => Concat (x :> xs) ys (x :> zs) where
+else instance concatRec
+  :: Concat xs ys zs
+  => Concat (x :> xs) ys (x :> zs) where
   concat _ _ = unsafeCoerce unit
 
 
@@ -103,9 +101,7 @@ class IsEmpty xs r | xs -> r where
 instance nilIsEmpty :: IsEmpty Nil' True where
   isEmpty _ = true
 
-else
-
-instance listIsEmpty :: IsEmpty (x :> xs) False where
+else instance listIsEmpty :: IsEmpty (x :> xs) False where
   isEmpty _ = false
 
 
@@ -116,9 +112,9 @@ class Init' xs ys zs | xs ys -> zs
 
 instance initBase :: Init' xs Nil' Nil'
 
-else
-
-instance initRec :: (Init' z zs ws) => Init' y (z :> zs) (y :> ws)
+else instance initRec
+  :: Init' z zs ws
+  => Init' y (z :> zs) (y :> ws)
 
 
 -- | Takes the `init` items of a `List'`.
@@ -127,7 +123,9 @@ class Init xs ys | xs -> ys where
   init :: forall lproxy. lproxy xs -> lproxy ys
 
 
-instance initList :: Init' x xs ys => Init (x :> xs) ys where
+instance initList
+  :: Init' x xs ys
+  => Init (x :> xs) ys where
   init _ = unsafeCoerce unit
 
 
@@ -140,9 +138,9 @@ class Last xs x | xs -> x where
 instance lastBase :: Last (x :> Nil') x where
   last _ = Proxy
 
-else
-
-instance lastRec :: Last xs ys => Last (x :> xs) ys where
+else instance lastRec
+  :: Last xs ys
+  => Last (x :> xs) ys where
   last _ = Proxy
 
 
@@ -153,12 +151,11 @@ class Length' xs n r | xs n -> r
 
 instance lengthBase :: Length' Nil' n n
 
-else
-
-instance lengthRec ::
-  ( Peano.SumInt n Peano.P1 m
-  , Length' xs m r
-  ) => Length' (x :> xs) n r
+else instance lengthRec
+  :: ( Peano.SumInt n Peano.P1 m
+     , Length' xs m r
+     )
+  => Length' (x :> xs) n r
 
 
 -- | Computes the length of a `List'` as a `Type.Data.Peano.Int`
@@ -167,7 +164,9 @@ class Length xs r | xs -> r where
   length :: forall lproxy iproxy. lproxy xs -> iproxy r
 
 
-instance lengthList :: Length' xs Peano.P0 r => Length xs r where
+instance lengthList
+  :: Length' xs Peano.P0 r
+  => Length xs r where
   length _ = unsafeCoerce unit
 
 
@@ -180,17 +179,14 @@ class Take n xs ys | n xs -> ys where
 instance takeZero :: Take Peano.P0 xs Nil' where
   take _ _ = unsafeCoerce unit
 
-else
-
-instance takeNil :: Take n Nil' Nil' where
+else instance takeNil :: Take n Nil' Nil' where
   take _ _ = unsafeCoerce unit
 
-else
-
-instance takeRec ::
-  ( Peano.SumInt n Peano.N1 m
-  , Take m xs ys
-  ) => Take n (x :> xs) (x :> ys) where
+else instance takeRec
+  :: ( Peano.SumInt n Peano.N1 m
+     , Take m xs ys
+     )
+  => Take n (x :> xs) (x :> ys) where
   take _ _ = unsafeCoerce unit
 
 
@@ -203,17 +199,14 @@ class Drop n xs ys | n xs -> ys where
 instance dropZero :: Drop Peano.P0 xs xs where
   drop _ _ = unsafeCoerce unit
 
-else
-
-instance dropNil :: Drop n Nil' Nil' where
+else instance dropNil :: Drop n Nil' Nil' where
   drop _ _ = unsafeCoerce unit
 
-else
-
-instance dropRec ::
-  ( Peano.SumInt n Peano.N1 m
-  , Drop m xs ys
-  ) => Drop n (x :> xs) ys where
+else instance dropRec
+  :: ( Peano.SumInt n Peano.N1 m
+     , Drop m xs ys
+     )
+  => Drop n (x :> xs) ys where
   drop _ _ = unsafeCoerce unit
 
 
@@ -226,16 +219,12 @@ class Zip x y z | x y -> z where
 instance zipLhsNil :: Zip Nil' y Nil' where
   zip _ _ = unsafeCoerce unit
 
-else
-
-instance zipRhsNil :: Zip x Nil' Nil' where
+else instance zipRhsNil :: Zip x Nil' Nil' where
   zip _ _ = unsafeCoerce unit
 
-else
-
-instance zipRec ::
-  ( Zip xs ys zs
-  ) => Zip ( x :> xs ) ( y :> ys ) ( Tuple x y :> zs ) where
+else instance zipRec
+  :: Zip xs ys zs
+  => Zip ( x :> xs ) ( y :> ys ) ( Tuple x y :> zs ) where
   zip _ _ = unsafeCoerce unit
 
 
@@ -248,11 +237,9 @@ class Map f xs ys | f xs -> ys where
 instance mapNil :: Map f Nil' Nil' where
   map _ _ = unsafeCoerce unit
 
-else
-
-instance mapRec ::
-  ( Map f xs ys
-  ) => Map f ( x :> xs ) ( f x :> ys ) where
+else instance mapRec
+  :: Map f xs ys
+  => Map f ( x :> xs ) ( f x :> ys ) where
   map _ _ = unsafeCoerce unit
 
 
@@ -265,11 +252,9 @@ class Fold f z xs r | f z xs -> r where
 instance foldNil :: Fold f z Nil' z where
   fold _ _ _ = unsafeCoerce unit
 
-else
-
-instance foldRec ::
-  ( Fold f ( f z x ) xs r
-  ) => Fold f z ( x :> xs ) r where
+else instance foldRec
+  :: Fold f ( f z x ) xs r
+  => Fold f z ( x :> xs ) r where
   fold _ _ _ = unsafeCoerce unit
 
 
@@ -282,16 +267,12 @@ class Foldr f z xs r | f z xs -> r where
 instance foldrNil :: Foldr f z Nil' z where
   foldr _ _ _ = unsafeCoerce unit
 
-else
-
-instance foldrOne :: Foldr f z ( x :> Nil' ) ( f x z ) where
+else instance foldrOne :: Foldr f z ( x :> Nil' ) ( f x z ) where
   foldr _ _ _ = unsafeCoerce unit
 
-else
-
-instance foldrRec ::
-  ( Foldr f z xs r
-  ) => Foldr f z ( x :> xs ) ( f x r ) where
+else instance foldrRec
+  :: Foldr f z xs r
+  => Foldr f z ( x :> xs ) ( f x r ) where
   foldr _ _ _ = unsafeCoerce unit
 
 
