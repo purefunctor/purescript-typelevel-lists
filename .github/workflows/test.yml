@@ -20,4 +20,4 @@ jobs:
 
       - run: spago build
 
-      - run: spago -x examples/examples.dhall build 
+      - run: spago -x tests.dhall test
