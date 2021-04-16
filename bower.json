@@ -1,19 +1,23 @@
 {
-  "name": "purescript-typelevel-lists",
-  "license": [
-    "BSD-3-Clause"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/PureFunctor/purescript-typelevel-lists"
-  },
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "output"
-  ],
-  "dependencies": {
-    "purescript-typelevel-peano": "v1.0.1"
-  }
+    "name": "purescript-typelevel-lists",
+    "license": [
+        "BSD-3-Clause"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/PureFunctor/purescript-typelevel-lists"
+    },
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "output"
+    ],
+    "dependencies": {
+        "purescript-prelude": "^v5.0.0",
+        "purescript-tuples": "^v6.0.0",
+        "purescript-typelevel-peano": "^v1.0.1",
+        "purescript-typelevel-prelude": "^v6.0.0",
+        "purescript-unsafe-coerce": "^v5.0.0"
+    }
 }
