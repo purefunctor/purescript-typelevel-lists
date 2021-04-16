@@ -9,7 +9,7 @@ import Test.Spec (Spec, describe, it)
 import Test.Spec.Assertions (shouldEqual)
 import Test.Spec.Reporter (consoleReporter)
 import Test.Spec.Runner (runSpec)
-import Type.Data.List (type (:>), Nil', concat, isMember)
+import Type.Data.List (type (:>), Nil')
 import Type.Data.List as TL
 import Type.Data.Peano as P
 import Type.Prelude (Proxy(..))
@@ -21,11 +21,11 @@ spec = do
 
   describe "IsMember" do
     it "tests empty lists" do
-      isMember (Proxy :: _ Int) (Proxy :: _ Nil') `shouldEqual` false
+      TL.isMember (Proxy :: _ Int) (Proxy :: _ Nil') `shouldEqual` false
     it "tests members" do
-      isMember (Proxy :: _ Int) xs `shouldEqual` true
+      TL.isMember (Proxy :: _ Int) xs `shouldEqual` true
     it "tests non-members" do
-      isMember (Proxy :: _ Boolean) xs `shouldEqual` false
+      TL.isMember (Proxy :: _ Boolean) xs `shouldEqual` false
 
   let ys = Proxy :: _ ( Int :> Nil' )
       zs = Proxy :: _ ( Char :> Nil' )
@@ -33,14 +33,14 @@ spec = do
 
   describe "Concat" do
     it "concatenates two lists" do
-      concat ys zs `shouldEqual` xs
+      TL.concat ys zs `shouldEqual` xs
     it "has a left unit" do
-      concat nl ys `shouldEqual` ys
+      TL.concat nl ys `shouldEqual` ys
     it "has a right unit" do
-      concat zs nl `shouldEqual` zs
+      TL.concat zs nl `shouldEqual` zs
     it "is an associative operation" do
-      let l = ys `concat` (ys `concat` zs)
-          r = (ys `concat` ys) `concat` zs
+      let l = ys `TL.concat` (ys `TL.concat` zs)
+          r = (ys `TL.concat` ys) `TL.concat` zs
       l `shouldEqual` r
 
   describe "IsEmpty" do
