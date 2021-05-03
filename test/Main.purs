@@ -15,6 +15,11 @@ import Type.Data.Peano as P
 import Type.Prelude (Proxy(..))
 
 
+data Literals
+
+foreign import data LiteralSymbol :: Symbol -> Literals
+
+
 spec :: Spec Unit
 spec = do
   let xs = Proxy :: _ ( Int :> Char :> Nil' )
@@ -102,6 +107,10 @@ spec = do
     it "transforms a non-empty list" do
       let r = Proxy :: _ ( Array Int :> Array Char :> Nil' )
       TL.map ( Proxy :: _ Array ) xs `shouldEqual` r
+    it "allows mapping into another kind" do
+      let k = Proxy :: _ ( "hello" :> Nil' )
+          l = Proxy :: _ ( LiteralSymbol "hello" :> Nil' )
+      TL.map ( Proxy :: _ LiteralSymbol ) k `shouldEqual` l
 
   let f = ( Proxy :: _ Tuple )
       a = ( Proxy :: _ String )
