@@ -229,7 +229,7 @@ else instance zipRec
 
 
 -- | Maps a type constructor to a `List'`.
-class Map :: forall func k l. func -> List' k -> List' l -> Constraint
+class Map :: forall k l. (k -> l) -> List' k -> List' l -> Constraint
 class Map f xs ys | f xs -> ys where
   map :: forall fproxy kproxy lproxy. fproxy f -> kproxy xs -> lproxy ys
 
