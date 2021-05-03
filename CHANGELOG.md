@@ -14,29 +14,32 @@ New features:
 Bugfixes:
 
 Other improvements:
+* Reworded [CHANGELOG.md](./CHANGELOG.md) to use a more concise format.
 
-## [2.0.0] - BREAKING!
-### Added
-* The `k` parameter for `List'`, enforcing homogeneity of kinds.
-* Type class methods for operating on lists, verified using tests.
-* The `Foldr` type class with the `foldr` method.
-### Changed
-* Dependencies in spago.dhall to fix builds with Spago 0.20.0.
-### Removed
-* Example code in favor of testing value-level functions.
+## [2.0.0](https://github.com/PureFunctor/purescript-typelevel-lists/releases/tag/v2.0.0)
+Breaking changes:
+* Added the `k` parameter for `List'`, enforcing homogeneity of kinds.
 
-## [1.1.0]
-### Added
-* The `Zip`, `Map`, and `Fold` type classes.
-### Changed
-* Documentation wording to remove references to `Item'`.
+New features:
+* Added the `Foldr` type class.
+* Added type class methods for operating on lists, with examples in the [test](./test) directory.
 
-## [1.0.0]
-### Changed
+Other improvements:
+* Fixed dependency warnings emitted by Spago 0.20.0
+* Removed example code in favor of testing type class methods.
+
+## [1.1.0](https://github.com/PureFunctor/purescript-typelevel-lists/releases/tag/v1.1.0)
+New features:
+* Added the `Zip`, `Map`, and `Fold` type classes.
+
+Other improvements:
+* Reworded documentation to remove references to `Item'`.
+
+## [1.0.0](https://github.com/PureFunctor/purescript-typelevel-lists/releases/tag/v1.0.0)
+Breaking changes:
 * Migrated from PureScript 0.13.x to PureScript 0.14.x, refactoring deprecated syntax.
-### Removed
-* The `Item'` kind and the `ItemProxy` data type.
+* Removed the  `Item'` kind and the `ItemProxy` data type.
 
-## [0.3.x] 
-### Added
+## [0.3.x](https://github.com/PureFunctor/purescript-typelevel-lists/releases/tag/v0.3.1)
+New features:
 * List and item kinds, proxies, and associated operations; compiles on PureScript 0.13.x.
