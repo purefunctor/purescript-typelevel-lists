@@ -1,36 +1,6 @@
 -- | Type-level heterogenous list of kinds for PureScript
 module Type.Data.List
-  ( List'
-  , Nil'
-  , Cons'
-  , type (:>)
-  , class IsMember
-  , isMember
-  , class Concat
-  , concat
-  , class IsEmpty
-  , isEmpty
-  , class Init
-  , init
-  , class Init'
-  , class Last
-  , last
-  , class Length
-  , length
-  , class Length'
-  , class Take
-  , take
-  , class Drop
-  , drop
-  , class Zip
-  , zip
-  , class Map
-  , map
-  , class Fold
-  , fold
-  , class Foldr
-  , foldr
-  , ListProxy(..)
+  ( module Type.Data.List
   )
   where
 

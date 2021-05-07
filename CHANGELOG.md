@@ -16,6 +16,7 @@ Bugfixes:
 
 Other improvements:
 * Reworded [CHANGELOG.md](./CHANGELOG.md) to use a more concise format.
+* Shortened export list in `Type.Data.List` using a module export.
 
 ## [2.0.0](https://github.com/PureFunctor/purescript-typelevel-lists/releases/tag/v2.0.0)
 Breaking changes:
