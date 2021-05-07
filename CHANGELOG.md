@@ -9,7 +9,8 @@ Breaking changes:
 
 New features:
 * Allowed `Map` operations to have a different resulting kind.
-* Replaced the `func` type variable in `Map` with a higher-kinded type `(k -> l)`.
+* Replaced the `func` type variable in `Map` with a higher-kinded type `(k -> l)`, in `Fold` and
+  `Foldr` with `(k -> k -> k)`.
 
 Bugfixes:
 
