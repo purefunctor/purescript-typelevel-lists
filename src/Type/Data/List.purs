@@ -244,7 +244,7 @@ else instance mapRec
 
 
 -- | Folds a `List'` into a singular value, left-associative.
-class Fold :: forall func k. func -> k -> List' k -> k -> Constraint
+class Fold :: forall k. (k -> k -> k) -> k -> List' k -> k -> Constraint
 class Fold f z xs r | f z xs -> r where
   fold :: forall fproxy kproxy lproxy. fproxy f -> kproxy z -> lproxy xs -> kproxy r
 
@@ -259,7 +259,7 @@ else instance foldRec
 
 
 -- | Folds a `List'` into a singular value, right-associative.
-class Foldr :: forall func k. func -> k -> List' k -> k -> Constraint
+class Foldr :: forall k. (k -> k -> k) -> k -> List' k -> k -> Constraint
 class Foldr f z xs r | f z xs -> r where
   foldr :: forall fproxy kproxy lproxy. fproxy f -> kproxy z -> lproxy xs -> kproxy r
 
