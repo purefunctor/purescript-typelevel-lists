@@ -8,11 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Breaking changes:
 
 New features:
+
+Bugfixes:
+
+Other improvements:
+
+## [2.1.0](https://github.com/PureFunctor/purescript-typelevel-lists/releases/tag/v2.1.0)
+New features:
 * Allowed `Map` operations to have a different resulting kind.
 * Replaced the `func` type variable in `Map` with a higher-kinded type `(k -> l)`, in `Fold` and
   `Foldr` with `(k -> k -> k)`.
-
-Bugfixes:
 
 Other improvements:
 * Reworded [CHANGELOG.md](./CHANGELOG.md) to use a more concise format.
